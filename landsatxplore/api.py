@@ -35,7 +35,7 @@ class API(object):
         self.login(username, password)
 
     @staticmethod
-    def raise_api_error(response):
+    def raise_api_error(response: requests.models.Response):
         """Parse API response and return the appropriate exception.
 
         Parameters
@@ -43,7 +43,11 @@ class API(object):
         response : requests response
             Response from USGS API.
         """
-        data = response.json()
+        try:
+            data = response.json()
+        except requests.exceptions.JSONDecodeError:
+            raise USGSError(f"{response.return_code"}: {response.reason}")
+
         error_code = data.get("errorCode")
         error_msg = data.get("errorMessage")
         if error_code:
