@@ -46,7 +46,7 @@ class API(object):
         try:
             data = response.json()
         except requests.exceptions.JSONDecodeError:
-            raise USGSError(f"{response.return_code}: {response.reason}")
+            raise USGSError(f"{response.status_code}: {response.reason}")
 
         error_code = data.get("errorCode")
         error_msg = data.get("errorMessage")
